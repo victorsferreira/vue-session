@@ -1,4 +1,4 @@
-function setAll(all){
+const setAll = function (all){
   window.sessionStorage.setItem(VueSession.key,JSON.stringify(all));
 }
 
