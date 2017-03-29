@@ -62,4 +62,9 @@ const VueSession = {
   },
 };
 
-module.exports = VueSession;
+if(typeof window !== 'undefined' && window.Vue){
+  window.VueSession = VueSession;
+  window.Vue.use(VueSession);
+}
+
+export default VueSession;

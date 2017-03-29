@@ -1,8 +1,10 @@
 {
   "name": "vue-session",
-  "version": "0.1.0",
+  "version": "0.9.2",
   "description": "A simplistic session plugin for VueJS backed by SessionStorage",
   "main": "index.js",
+  "dpkg": "index.dpkg.js",
+  "esm": "index.esm.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -13,7 +13,7 @@ Now you can use it in your components with the `$session` property.
 - `this.$session.getAll()`, returns all data stored in the Session.
 - `this.$session.set(key,value)`, sets a single value to the Session.
 - `this.$session.get(key)`, returns the value attributed to the given key.
-- `this.$session.start()`, initializes a session with a 'session-id'. If you attempt to save a value without having started a new session, the plugin will automatically starts a new session.
+- `this.$session.start()`, initializes a session with a 'session-id'. If you attempt to save a value without having started a new session, the plugin will automatically start a new session.
 - `this.$session.exists()`, checks whether a session has been initialized or not.
 - `this.$session.has(key)`, checks whether the key exists in the Session
 - `this.$session.remove(key)`, removes the given key from the Session
@@ -39,7 +39,7 @@ export default {
               this.$session.start()
               this.$session.set('jwt', response.body.token)
               Vue.http.headers.common['Authorization'] = 'Bearer ' + response.body.token
-              self.$router.push('/panel/search')
+              this.$router.push('/panel/search')
             }
           }, function (err) {
             console.log('err', err)
