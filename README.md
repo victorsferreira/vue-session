@@ -7,7 +7,8 @@ Vue.use(VueSession)
 
 Now you can use it in your components with the `$session` property.
 
-Reference:
+
+## Reference
 
 - `this.$session.getAll()`, returns all data stored in the Session.
 - `this.$session.set(key,value)`, sets a single value to the Session.
@@ -19,32 +20,36 @@ Reference:
 - `this.$session.clear()`, clear all keys in the Session, except for 'session-id', keeping the Session alive
 - `this.$session.destroy()`, destroys the Session
 - `this.$session.id()`, returns the 'session-id'
-- 
-Example:
+
+
+## Example
 
 Your login method could look like this:
 
 ```javascript
-methods: {
-    login: function () {
-      this.$http.post('http://somehost/user/login', {
-        password: this.password,
-        email: this.email
-      }).then(function (response) {
-        if (response.status === 200 && 'token' in response.body) {
-          this.$session.start()
-          this.$session.set('jwt', response.body.token)
-          Vue.http.headers.common['Authorization'] = 'Bearer ' + response.body.token
-          self.$router.push('/panel/search')
+export default {
+    name: 'login',
+    methods: {
+        login: function () {
+          this.$http.post('http://somehost/user/login', {
+            password: this.password,
+            email: this.email
+          }).then(function (response) {
+            if (response.status === 200 && 'token' in response.body) {
+              this.$session.start()
+              this.$session.set('jwt', response.body.token)
+              Vue.http.headers.common['Authorization'] = 'Bearer ' + response.body.token
+              self.$router.push('/panel/search')
+            }
+          }, function (err) {
+            console.log('err', err)
+          })
         }
-      }, function (err) {
-        console.log('err', err)
-      })
     }
 }
 ```
 
-In your logged in area, you can check whether or not a session is started and destroy it when the use invoke `destroy`:
+In your logged-in area, you can check whether or not a session is started and destroy it when the user wants to logout:
 
 ```javascript
 export default {
