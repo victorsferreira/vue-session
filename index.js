@@ -15,7 +15,7 @@ const VueSession = {
         var all = this.getAll();
 
         if(!('session-id' in all)){
-          this.init();
+          this.start();
           all = this.getAll();
         }
 
