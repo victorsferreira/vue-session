@@ -4,7 +4,7 @@ const setAll = function (all){
 
 const VueSession = {
   key: 'vue-session-key',
-  install(Vue, options) {
+  install:function install(Vue, options) {
     Vue.prototype.$session = {
       getAll: function(){
         var all = JSON.parse(window.sessionStorage.getItem(VueSession.key));
