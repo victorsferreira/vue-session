@@ -1,9 +1,8 @@
-const setAll = function (all){
-    window.sessionStorage.setItem(VueSession.key,JSON.stringify(all));
-}
-
 var VueSession = {
-    key: 'vue-session-key'
+    key: 'vue-session-key',
+    setAll: function(all){
+        window.sessionStorage.setItem(VueSession.key,JSON.stringify(all));
+    }
 }
 
 VueSession.install = function(Vue, options) {
@@ -23,7 +22,7 @@ VueSession.install = function(Vue, options) {
 
             all[key] = value;
 
-            setAll(all);
+            this.setAll(all);
         },
         get: function(key){
             var all = this.getAll();
@@ -33,7 +32,7 @@ VueSession.install = function(Vue, options) {
             var all = this.getAll();
             all['session-id'] = 'sess:'+Date.now();
 
-            setAll(all);
+            this.setAll(all);
         },
         exists: function(){
             var all = this.getAll();
@@ -47,15 +46,15 @@ VueSession.install = function(Vue, options) {
             var all = this.getAll();
             delete all[key];
 
-            setAll(all);
+            this.setAll(all);
         },
         clear: function(){
             var all = this.getAll();
 
-            setAll({'session-id': all['session-id']});
+            this.setAll({'session-id': all['session-id']});
         },
         destroy: function(){
-            setAll({});
+            this.setAll({});
         },
         id: function(){
             return this.get('session-id');
