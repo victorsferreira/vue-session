@@ -1,6 +1,6 @@
 {
   "name": "vue-session",
-  "version": "0.9.3",
+  "version": "0.9.6",
   "description": "A simplistic session plugin for VueJS backed by SessionStorage",
   "main": "index.js",
   "unpkg": "index.unpkg.js",
