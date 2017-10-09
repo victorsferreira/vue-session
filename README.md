@@ -21,6 +21,14 @@ Now you can use it in your components with the `$session` property.
 - `this.$session.destroy()`, destroys the Session
 - `this.$session.id()`, returns the 'session-id'
 
+### Flash
+
+Flash allows you to save data until you read them without having to start a regular Session.
+
+- `this.$session.flash.set(key, value)`, sets a flash value
+- `this.$session.flash.get(key)`, reads and removes a flash value
+- `this.$session.flash.remove(key)`, removes a flash value
+
 
 ## Example
 
