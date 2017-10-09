@@ -1,5 +1,6 @@
 var VueSession = {
     key: 'vue-session-key',
+    flash_key: 'vue-session-flash-key',
     setAll: function(all){
         window.sessionStorage.setItem(VueSession.key,JSON.stringify(all));
     }
@@ -7,6 +8,39 @@ var VueSession = {
 
 VueSession.install = function(Vue, options) {
     Vue.prototype.$session = {
+        flash: {
+            parent: function(){
+                return Vue.prototype.$session;
+            },
+            get: function(key){
+                var all = this.parent().getAll();
+                var all_flash = all[VueSession.flash_key] || {};
+
+                var flash_value = all_flash[key];
+
+                this.remove(key);
+
+                return flash_value;
+            },
+            set: function(key, value){
+                var all = this.parent().getAll();
+                var all_flash = all[VueSession.flash_key] || {};
+
+                all_flash[key] = value;
+                all[VueSession.flash_key] = all_flash;
+
+                VueSession.setAll(all);
+            },
+            remove: function(key){
+                var all = this.parent().getAll();
+                var all_flash = all[VueSession.flash_key] || {};
+
+                delete all_flash[key];
+
+                all[VueSession.flash_key] = all_flash;
+                VueSession.setAll(all);
+            }
+        },
         getAll: function(){
             var all = JSON.parse(window.sessionStorage.getItem(VueSession.key));
             return all || {};
@@ -16,13 +50,13 @@ VueSession.install = function(Vue, options) {
             var all = this.getAll();
 
             if(!('session-id' in all)){
-                this.init();
+                this.start();
                 all = this.getAll();
             }
 
             all[key] = value;
 
-            this.setAll(all);
+            VueSession.setAll(all);
         },
         get: function(key){
             var all = this.getAll();
@@ -32,7 +66,7 @@ VueSession.install = function(Vue, options) {
             var all = this.getAll();
             all['session-id'] = 'sess:'+Date.now();
 
-            this.setAll(all);
+            VueSession.setAll(all);
         },
         exists: function(){
             var all = this.getAll();
@@ -46,15 +80,15 @@ VueSession.install = function(Vue, options) {
             var all = this.getAll();
             delete all[key];
 
-            this.setAll(all);
+            VueSession.setAll(all);
         },
         clear: function(){
             var all = this.getAll();
 
-            this.setAll({'session-id': all['session-id']});
+            VueSession.setAll({'session-id': all['session-id']});
         },
         destroy: function(){
-            this.setAll({});
+            VueSession.setAll({});
         },
         id: function(){
             return this.get('session-id');
