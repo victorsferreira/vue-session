@@ -85,7 +85,7 @@ VueSession.install = function(Vue, options) {
         clear: function(){
             var all = this.getAll();
 
-            VueSession.setAll({'session-id': all['session-id']});
+            VueSession.setAll({'session-id': this.id()});
         },
         destroy: function(){
             VueSession.setAll({});
