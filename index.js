@@ -68,6 +68,11 @@ VueSession.install = function(Vue, options) {
 
             VueSession.setAll(all);
         },
+        renew: function(sessionId){
+            var all = this.getAll();
+            all['session-id'] = 'sess:' + sessionId;
+            VueSession.setAll(all);
+        }
         exists: function(){
             var all = this.getAll();
             return 'session-id' in all;
