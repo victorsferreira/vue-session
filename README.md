@@ -7,6 +7,17 @@ Vue.use(VueSession)
 
 Now you can use it in your components with the `$session` property.
 
+## Options
+
+VueSession can be started with some options that will change its behavior.
+
+- `persist` A Boolean value to determine whether the data stored in the session may persist between tabs and browser instances.
+
+Pass the options in the `use` method:
+
+```javascript
+Vue.use(VueSession, options)
+```
 
 ## Reference
 
@@ -20,6 +31,7 @@ Now you can use it in your components with the `$session` property.
 - `this.$session.clear()`, clear all keys in the Session, except for 'session-id', keeping the Session alive
 - `this.$session.destroy()`, destroys the Session
 - `this.$session.id()`, returns the 'session-id'
+- `this.$session.renew(session_id)`, allows a user to renew a previous session by manually inputting the session_id
 
 ### Flash
 

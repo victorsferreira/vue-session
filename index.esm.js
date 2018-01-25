@@ -1,12 +1,15 @@
+var STORAGE = null;
 var VueSession = {
     key: 'vue-session-key',
     flash_key: 'vue-session-flash-key',
     setAll: function(all){
-        window.sessionStorage.setItem(VueSession.key,JSON.stringify(all));
+        STORAGE.setItem(VueSession.key,JSON.stringify(all));
     }
 }
 
 VueSession.install = function(Vue, options) {
+    if(options && 'persist' in options && options.persist) STORAGE = window.localStorage;
+    else STORAGE = window.sessionStorage;
     Vue.prototype.$session = {
         flash: {
             parent: function(){
@@ -42,7 +45,7 @@ VueSession.install = function(Vue, options) {
             }
         },
         getAll: function(){
-            var all = JSON.parse(window.sessionStorage.getItem(VueSession.key));
+            var all = JSON.parse(STORAGE.getItem(VueSession.key));
             return all || {};
         },
         set: function(key,value){
