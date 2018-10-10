@@ -1,15 +1,51 @@
 var STORAGE = null;
+var LIFE_SESSION = 1;
+var INACTIVITY_SESSION = null;
+
 var VueSession = {
     key: 'vue-session-key',
     flash_key: 'vue-session-flash-key',
     setAll: function(all){
+        var timelife = new Date().getTime() + LIFE_SESSION * 60 * 1000;
+        if(Object.keys(all).length > 0) all['timelife'] = timelife
         STORAGE.setItem(VueSession.key,JSON.stringify(all));
     }
 }
 
+var liveSession = function () {
+    var off = INACTIVITY_SESSION * 60 * 1000; 
+    var t;
+    window.onload = resetTimer;
+    // DOM Events
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+
+    function destroy() {
+        var all = JSON.parse(STORAGE.getItem(VueSession.key));
+        VueSession.setAll({'session-id': all['session-id'], 'timelife': all['timelife'] });
+    }
+    function refresh() {
+        var all = JSON.parse(STORAGE.getItem(VueSession.key));
+        var timelife = new Date().getTime() + LIFE_SESSION * 60 * 1000;
+        all['timelife'] = timelife
+        STORAGE.setItem(VueSession.key,JSON.stringify(all));
+    }
+    function resetTimer() {
+        clearTimeout(t);
+        refresh();
+        if(INACTIVITY_SESSION!==null) t = setTimeout(destroy, off)        
+        else t = setInterval(refresh, 1000)
+    }
+};
+window.onload = liveSession;
+
 VueSession.install = function(Vue, options) {
     if(options && 'persist' in options && options.persist) STORAGE = window.localStorage;
     else STORAGE = window.sessionStorage;
+
+    if(options && 'life_session' in options && options.life_session) LIFE_SESSION = options.life_session;
+    if(options && 'inactivity_session' in options && options.inactivity_session) INACTIVITY_SESSION = options.inactivity_session;
+
     Vue.prototype.$session = {
         flash: {
             parent: function(){
@@ -46,7 +82,13 @@ VueSession.install = function(Vue, options) {
         },
         getAll: function(){
             var all = JSON.parse(STORAGE.getItem(VueSession.key));
-            return all || {};
+            var life = all['timelife'];
+            if(new Date().getTime() < life){
+                return all || {};
+            }else{
+                this.clear() ;
+                return {};
+            }    
         },
         set: function(key,value){
             if(key == 'session-id') return false;
@@ -93,7 +135,7 @@ VueSession.install = function(Vue, options) {
         clear: function(){
             var all = this.getAll();
 
-            VueSession.setAll({'session-id': all['session-id']});
+            VueSession.setAll({'session-id': all['session-id'], 'timelife': all['timelife'] });
         },
         destroy: function(){
             VueSession.setAll({});
