@@ -11,13 +11,19 @@ Now you can use it in your components with the `$session` property.
 
 VueSession can be started with some options that will change its behavior.
 
-- `persist` A Boolean value to determine whether the data stored in the session may persist between tabs and browser instances. Defaults to `false`.
+| Name | Type | Description |
+| -------- | -------- | -------- |
+| `persist`     | Boolean     | A Boolean value to determine whether the data stored in the session may persist between tabs and browser instances Defaults to `false`.     |
+| `life_session`     | Int     | An Int value to determine the lifetime of the session after closing the browser, the value is defined in minutes. Defaults to `(1)`.     |
+| `inactivity_session`     | Int     | An Int value to determine the lifetime of the session if the user is inactive, the value is defined in minutes. Defaults to `null`.     |
 
 Pass the options in the `use` method:
 
 ```javascript
 var options = {
-    persist: true
+    persist: true,
+    life_session: 5,
+    inactivity_session: 3
 }
 
 Vue.use(VueSession, options)
